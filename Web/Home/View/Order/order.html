@@ -1,0 +1,442 @@
+<extend name="Base/base" />
+	<block name="head">
+		<link href="__PUBLIC__/css/admin.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/amazeui.css" rel="stylesheet" type="text/css">
+
+		<link href="__PUBLIC__/css/personal.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/orstyle.css" rel="stylesheet" type="text/css">
+
+		<script src="__PUBLIC__/js/jquery.min.js"></script>
+		<script src="__PUBLIC__/js/amazeui.js"></script>
+		<style>
+  .pagination ul {
+    display: inline-block;
+    margin-bottom: 0;
+    margin-left: 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.pagination ul li {
+  display: inline;
+}
+
+.pagination ul li.rows {
+    line-height: 30px;
+    padding-left: 5px;
+}
+.pagination ul li.rows b{color: #f00}
+
+.pagination ul li a, .pagination ul li span {
+    float: left;
+    padding: 4px 12px;
+    line-height: 20px;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #d3dbde;
+    /*border-left-width: 0;*/
+    margin-left: 2px;
+    color: #08c;
+}
+.pagination ul li a:hover{
+    color: red;
+    background: #0088cc;
+}
+.pagination ul li.first-child a, .pagination ul li.first-child span {
+    border-left-width: 1px;
+    -webkit-border-bottom-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    -webkit-border-top-left-radius: 3px;
+    border-top-left-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    -moz-border-radius-topleft: 3px;
+}
+.pagination ul .disabled span, .pagination ul .disabled a, .pagination ul .disabled a:hover {
+color: #999;
+cursor: default;
+background-color: transparent;
+}
+.pagination ul .active a, .pagination ul .active span {
+color: #999;
+cursor: default;
+}
+.pagination ul li a:hover, .pagination ul .active a, .pagination ul .active span {
+background-color: #f0c040;
+}
+.pagination ul li.last-child a, .pagination ul li.last-child span {
+    -webkit-border-top-right-radius: 3px;
+    border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+}
+
+.pagination ul li.current a{color: #f00 ;font-weight: bold; background: #ddd}
+</style>
+	</block>			
+		<block name="main">
+					<div class="user-order">
+
+						<!--标题 -->
+						<div class="am-cf am-padding">
+							<div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">订单管理</strong> / <small>Order</small></div>
+						</div>
+						<hr/>
+
+						<div class="am-tabs am-tabs-d2 am-margin" data-am-tabs>
+
+							<ul class="am-avg-sm-5 am-tabs-nav am-nav am-nav-tabs" id="change">
+								<li class="am-active"><a href="#tab1">所有订单</a></li>
+								<li><a tid="2" href="#tab2" id="ace">待付款</a></li>
+								<li><a tid="3" href="#tab3" id="ace">待发货</a></li>
+								<li><a tid="4" href="#tab4" id="ace">待收货</a></li>
+								<li><a tid="5" href="#tab5" id="ace">待评价</a></li>
+							</ul>
+
+							<div class="am-tabs-bd">
+								<div class="am-tab-panel am-fade am-in am-active" id="tab1" >
+									<div class="order-top">
+										<div class="th th-item">
+											<td class="td-inner">商品</td>
+										</div>
+										<div class="th th-price">
+											<td class="td-inner">单价</td>
+										</div>
+										<div class="th th-number">
+											<td class="td-inner">数量</td>
+										</div>
+										<div class="th th-operation">
+											<td class="td-inner">商品操作</td>
+										</div>
+										<div class="th th-amount">
+											<td class="td-inner">合计</td>
+										</div>
+										<div class="th th-status">
+											<td class="td-inner">交易状态</td>
+										</div>
+										<div class="th th-change">
+											<td class="td-inner">交易操作</td>
+										</div>
+									</div>
+
+									<div class="order-main">
+									<div class="order-list">
+											
+											<!--交易成功-->
+											<!--不同状态订单-->
+											<foreach name="list" item="v">
+											<div class="order-status3">
+												<div class="order-title">
+													<div class="dd-num">订单编号：<a href="javascript:;">{$v.oid}</a></div>
+													<span>成交时间：{$v.addtime}</span>
+													<!--    <em>店铺：小桔灯</em>-->
+												</div>
+												<div class="order-content">
+													<div class="order-left">
+
+
+												<foreach name="list2" item="v2">		
+													<if condition="$v2['orderid'] eq $v['id']">
+														<ul class="item-list">
+															<li class="td td-item">
+																<div class="item-pic">
+																	<a href="{:U('Goods/detail',['id'=>$v2['goodsid']])}" class="J_MakePoint">
+																		<img src="/Test/{$v2.picname}" class="itempic J_ItemImg">
+																	</a>
+																</div>
+																<div class="item-info">
+																	<div class="item-basic-info">
+																		<a href="{:U('Goods/detail',['id'=>$v2['goodsid']])}">
+																			<p>{$v2.name}</p>
+																			<p class="info-little">分类：{$v2.taste}
+																				
+																		</a>
+																	</div>
+																</div>
+															</li>
+															<li class="td td-price">
+																<div class="item-price">
+																	{$v2.price}
+																</div>
+															</li>
+															<li class="td td-number">
+																<div class="item-number">
+																	<span>×</span>{$v2.num}
+																</div>
+															</li>
+															<li class="td td-operation">
+																<div class="item-operation">
+																	<a href="{:U('Goods/detail',['id'=>$v2['goodsid']])}">查看</a>
+																</div>
+															</li>
+														</ul>
+													</if>
+												</foreach>
+
+
+
+													</div>
+													<div class="order-right">
+														<li class="td td-amount">
+															<div class="item-amount">
+																合计：{$v.total}元
+																<p>(包邮)</p>
+															</div>
+														</li>
+														<div class="move-right">
+															<li class="td td-status">
+																<div class="item-status">
+																	<p class="Mystatus">{$v.status}</p>
+																	<p class="order-info"><a href="{:U('Order/orderInfo',['id'=> $v['id'] ])}">订单详情</a></p>
+																	<if condition="$v.status eq '待收货'">
+																		<p class="order-info"><a href="">查看物流</a></p>
+																	
+																		<p class="order-info"><a href="#">延长收货</a></p>
+																	</if>
+																</div>
+															</li>
+															<li class="td td-change">
+															<switch name="v.status">
+
+																<case value="待付款">
+																<a href="{:U('Order/pay',['id'=>$v['id']])}"><div class="am-btn am-btn-danger anniu">
+																	立即付款</div></a>
+																</case>
+
+																<case value="待发货">
+																<div class="am-btn am-btn-danger anniu">
+																	提醒发货</div>
+																</case>
+
+																<case value="待收货">
+																<a href="{:U('Order/doGet',['id'=>$v['id']])}"><div class="am-btn am-btn-danger anniu">
+																	确认收货</div></a>
+																</case>
+
+																<case value="已完成">
+																<a href="{:U('Order/commentList',['id'=>$v['id']])}"><div class="am-btn am-btn-danger anniu">立刻评价</div></a>
+																</case>
+																
+																<case value="已评价">
+																已评价
+																</case>
+																<case value="已失效">
+																已失效
+																</case>
+															</switch>
+															</li>
+														</div>
+													</div>
+												</div>
+
+											</div>
+											</foreach>
+		
+									
+											<div class="order-status1">
+											<div class="order-title">
+												<div class="pagination" style="position:absolute;left:500px;z-line:10">
+										        	<ul>
+										          		{$btn}
+										       		</ul>
+												</div>
+											</div>
+											</div>
+
+
+
+
+
+									</div>
+
+									</div>
+									
+
+								</div>
+
+								<div class="am-tab-panel am-fade" id="tab2" oid="1">
+
+									<div class="order-top">
+										<div class="th th-item">
+											<td class="td-inner">商品</td>
+										</div>
+										<div class="th th-price">
+											<td class="td-inner">单价</td>
+										</div>
+										<div class="th th-number">
+											<td class="td-inner">数量</td>
+										</div>
+										<div class="th th-operation">
+											<td class="td-inner">商品操作</td>
+										</div>
+										<div class="th th-amount">
+											<td class="td-inner">合计</td>
+										</div>
+										<div class="th th-status">
+											<td class="td-inner">交易状态</td>
+										</div>
+										<div class="th th-change">
+											<td class="td-inner">交易操作</td>
+										</div>
+									</div>
+
+									<div class="order-main"></div>
+								</div>
+
+								<div class="am-tab-panel am-fade" id="tab3" oid="2">
+									<div class="order-top">
+										<div class="th th-item">
+											<td class="td-inner">商品</td>
+										</div>
+										<div class="th th-price">
+											<td class="td-inner">单价</td>
+										</div>
+										<div class="th th-number">
+											<td class="td-inner">数量</td>
+										</div>
+										<div class="th th-operation">
+											<td class="td-inner">商品操作</td>
+										</div>
+										<div class="th th-amount">
+											<td class="td-inner">合计</td>
+										</div>
+										<div class="th th-status">
+											<td class="td-inner">交易状态</td>
+										</div>
+										<div class="th th-change">
+											<td class="td-inner">交易操作</td>
+										</div>
+									</div>
+
+									<div class="order-main"></div>
+								</div>
+
+								<div class="am-tab-panel am-fade" id="tab4" oid="3">
+									<div class="order-top">
+										<div class="th th-item">
+											<td class="td-inner">商品</td>
+										</div>
+										<div class="th th-price">
+											<td class="td-inner">单价</td>
+										</div>
+										<div class="th th-number">
+											<td class="td-inner">数量</td>
+										</div>
+										<div class="th th-operation">
+											<td class="td-inner">商品操作</td>
+										</div>
+										<div class="th th-amount">
+											<td class="td-inner">合计</td>
+										</div>
+										<div class="th th-status">
+											<td class="td-inner">交易状态</td>
+										</div>
+										<div class="th th-change">
+											<td class="td-inner">交易操作</td>
+										</div>
+									</div>
+
+									<div class="order-main"></div>
+								</div>
+
+								<div class="am-tab-panel am-fade" id="tab5" oid="4">
+									<div class="order-top">
+										<div class="th th-item">
+											<td class="td-inner">商品</td>
+										</div>
+										<div class="th th-price">
+											<td class="td-inner">单价</td>
+										</div>
+										<div class="th th-number">
+											<td class="td-inner">数量</td>
+										</div>
+										<div class="th th-operation">
+											<td class="td-inner">商品操作</td>
+										</div>
+										<div class="th th-amount">
+											<td class="td-inner">合计</td>
+										</div>
+										<div class="th th-status">
+											<td class="td-inner">交易状态</td>
+										</div>
+										<div class="th th-change">
+											<td class="td-inner">交易操作</td>
+										</div>
+									</div>
+
+									<div class="order-main"></div>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<script type="text/javascript">
+
+						$('.pagination a,.pagination span').unwrap('<div></div>').wrap('<li></li>');
+
+
+						$('#tab1').delegate('.pagination a','click',function(){
+							var pageObj = this;
+							var url = pageObj.href;
+							$.ajax({
+								url:url,
+								type:'get',
+								success:function(res){
+									$('#tab1 .order-main ').html(res);
+									
+									 $('.pagination a,.pagination span').unwrap('<div></div>').wrap('<li></li>');
+								}
+							});
+							return false;
+						});
+
+
+
+					$('body').delegate('#change #ace','click',function(){
+						var num = $(this).attr('tid');
+						// console.log(num,$('#tab'+ num + " .order-main").html());
+						if($('#tab'+ num + " .order-main").html() == ''){
+							// console.log('ajax');
+							var num1 = num - 1;
+							
+							$.ajax({
+								
+								url:"{:U('Order/index')}",
+								type:'get',
+								data:"status=" + num1,
+								success:function(res){
+									$('#tab'+ num + " .order-main").html(res);
+									$('#tab'+ num + " .order-main .pagination a,.pagination span").unwrap('<div></div>').wrap('<li></li>');
+								}
+							});
+
+						}
+					});
+
+					$('.am-tabs-bd').children().eq(0).siblings().delegate('.pagination a','click',function(){
+							console.log(22);
+							var pageObj = this;
+							var url = pageObj.href;
+							var num = $(this).closest('.am-tab-panel');
+							$.ajax({
+								url:url,
+								data:"status=" + num.attr('oid'),
+								type:'get',
+								success:function(res){
+									console.log(num);
+									num.find('.order-main').html(res);
+									// console.log(res);
+									 num.find('.pagination a,.pagination span').unwrap('<div></div>').wrap('<li></li>');
+								}
+							});
+							return false;
+						});
+
+					</script>
+		</block>
+				

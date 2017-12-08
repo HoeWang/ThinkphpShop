@@ -1,0 +1,113 @@
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>后台登录</title>
+    <meta name="author" content="DeathGhost" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/Test/Public/Admin/lcss/style.css" />
+    <style>
+        body{background:#23191d;overflow:hidden;}
+        canvas{position:absolute;}
+        #embed-captcha {
+            width: 300px;
+            margin: 0 auto;
+        }
+        .show {
+            display: block;
+        }
+        .hide {
+            display: none;
+        }
+        #notice {
+            color: red;
+        }
+    </style>
+    <script src="/Test/Public/Admin/ljs/jquery.js"></script>
+    <script src="/Test/Public/Admin/ljs/verificationNumbers.js"></script>
+    <script src="/Test/Public/Admin/ljs/Particleground.js"></script>
+    <script>
+    $(document).ready(function() {
+      //粒子背景特效
+      $('body').particleground({
+        dotColor: '#040fec',
+        lineColor: 'gray'
+      });
+
+    });
+    </script>
+</head>
+<body>
+    <dl class="admin_login">
+        <dt>
+        <strong>站点后台管理系统</strong>
+        <em>Management System</em>
+        </dt>
+        <form method="post">
+            <dd class="user_icon">
+                <input type="text" placeholder="账号" class="login_txtbx" name="username" onblur="check(this)" /><span></span>
+            </dd>
+            <dd class="pwd_icon">
+                <input type="password" placeholder="密码" class="login_txtbx" name="password" />
+            </dd>
+            <div id="embed-captcha"></div>
+            <p id="wait" class="show">正在加载验证码......</p>
+            <p id="notice" class="hide">请先完成验证</p>
+
+            <br>
+            <dd>
+            <input type="submit" value="立即登录" class="submit_btn" id="embed-submit"/>
+            </dd>
+        </form>
+        <dd>
+            <p>© 2017-7102 edmnstt 版权所有</p>
+            <p>A-asj156546515-1</p>
+        </dd>
+    </dl>
+</body>
+
+
+<!-- <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.js"></script> -->
+<script src="/Test/Public/Admin/yzm/./gt.js"></script>
+<script>
+    var handlerEmbed = function (captchaObj) {
+        $("#embed-submit").click(function (e) {
+            var validate = captchaObj.getValidate();
+            if (!validate) {
+                $("#notice")[0].className = "show";
+                setTimeout(function () {
+                    $("#notice")[0].className = "hide";
+                }, 2000);
+                e.preventDefault();
+            }
+        });
+        // 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode
+        captchaObj.appendTo("#embed-captcha");
+        captchaObj.onReady(function () {
+            $("#wait")[0].className = "hide";
+        });
+        // 更多接口参考：http://www.geetest.com/install/sections/idx-client-sdk.html
+    };
+    $.ajax({
+        // 获取id，challenge，success（是否启用failback）
+        url: "<?php echo U('Admin/Login/getVerify', ['t'=>time()]);?>",
+        // url: "../web/StartCaptchaServlet.php?t=" + (new Date()).getTime(), // 加随机数防止缓存
+        type: "get",
+        dataType: "json",
+        success: function (data) {
+            // console.log(data);
+            // 使用initGeetest接口
+            // 参数1：配置参数
+            // 参数2：回调，回调的第一个参数验证码对象，之后可以使用它做appendTo之类的事件
+            initGeetest({
+                gt: data.gt,
+                challenge: data.challenge,
+                new_captcha: data.new_captcha,
+                product: "embed", // 产品形式，包括：float，embed，popup。注意只对PC版验证码有效
+                offline: !data.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+                // 更多配置参数请参见：http://www.geetest.com/install/sections/idx-client-sdk.html#config
+            }, handlerEmbed);
+        }
+    });
+</script>
+</html>

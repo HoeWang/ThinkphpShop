@@ -1,0 +1,36 @@
+<extend name="Home/index" />
+<block name="head">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>购物车页面</title>
+
+		<link href="__PUBLIC__/css/amazeui.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/css/demo.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/css/cartstyle.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/css/optstyle.css" rel="stylesheet" type="text/css" />
+
+		<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+
+	</head>
+</block>
+
+
+<block name="main">
+	<div style="width:1200px;height:600px;margin:0 auto;">
+		<div class="success-top" style="margin-top:50px;">
+				<h3 style="font-size:18px;line-height:25px;font-weight:400;color:#5eb95e">商品已成功加入购物车！</h3>
+		</div>
+		<div style="margin-right:0px;margin-top:50px;float: right;">
+			<a class="btn-tobback" href="#" onclick="window.history.back();return false;" style="display: inline-block;height: 34px;line-height: 36px;font-size: 16px;vertical-align: middle;padding: 0 20px;margin-right: 10px;background: #fff;color: #e4393c;border: 1px solid #fff;border:1px solid red;">查看商品详情</a>
+			<a class="btn-addtocart" href="{:U('index')}" id="GotoShoppingCart" style="position: relative;width: 136px;background: #e4393c;border: 1px solid #e4393c;color: #fff;display: inline-block;height: 34px;line-height: 36px;font-size: 16px;vertical-align: middle;text-align: center">去购物车结算&gt</a>
+		</div>
+	</div>
+			
+</block>
+
+
+<block name="change">
+	
+</block>

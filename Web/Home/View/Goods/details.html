@@ -1,0 +1,536 @@
+<extend name="Home/index"/>
+
+<!-- 修改头部 -->
+<block name="head">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>商品页面</title>
+
+        <link href="__PUBLIC__/css/admin.css" rel="stylesheet" type="text/css" />
+        <link href="__PUBLIC__/css/amazeui.css" rel="stylesheet" type="text/css" />
+        <link href="__PUBLIC__/css/demo.css" rel="stylesheet" type="text/css" />
+        <link type="text/css" href="__PUBLIC__/css/optstyle.css" rel="stylesheet" />
+        <link type="text/css" href="__PUBLIC__/css/style.css" rel="stylesheet" />
+        <link type="text/css" href="__PUBLIC__/css/paging.css" rel="stylesheet" />
+        <script type="text/javascript" src="__PUBLIC__/js/jquery-1.7.min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/js/quick_links.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/js/amazeui.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/js/jquery.imagezoom.min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/js/jquery.flexslider.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/js/list.js"></script>
+
+    </head>
+</block>
+
+<!-- 重写主体模块，用于商品详情 -->
+
+<block name="main">
+<!-- 浏览历史 -->
+<div   style="position:absolute;right:35px;top:200px;border:1px solid lightgray;width:110px;height:450px;overflow:auto;background:white">
+    <center>
+        <font color="#b81c22">最近还看了</font>
+        <a href="#" id="clear_id">
+            <button style="background: #A10000 url() repeat-x;
+            display: inline-block;
+            padding: 5px 10px 6px;
+            color: #fff;
+            text-decoration: none;
+            -moz-border-radius: 6px;
+            -webkit-border-radius: 6px;
+            -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+            -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+            text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+            position: relative;
+            cursor: pointer">清空浏览</button>
+        </a>
+    </center>
+    <hr>
+    <center>
+        <ul>
+            <foreach name="browse" item="val">
+            <li><hr>
+                <a href="{:U('Goods/detail',['id'=>$val['id']])}" >
+                    <img src="/Test/{$val['cover']}?>" width="80" height="80"></a ><br><a href="{:U('Goods/detail',['id'=>$val['id']])}">
+                    <font size="2">名称:{$val['name']}</font>
+                </a >           
+                <div>
+                    <span><font size="2" id="sc">售价￥{:number_format($val['promotion_price'],2)}</font></span>
+                </div>           
+            </li>
+            </foreach>
+        </ul>
+    </center>
+</div>
+<div class="listMain">
+    <ol class="am-breadcrumb am-breadcrumb-slash">
+    <!-- 遍历面包屑 -->
+        <li><a href="{:U('Index/index')}">首页</a></li>
+        <foreach name="bread" item="v">
+            <li><a href="#">{$v['name']}</a></li>
+        </foreach>
+    </ol>
+             
+    <script type="text/javascript">
+        $(function() {});
+        $(window).load(function() {
+            $('.flexslider').flexslider({
+                animation: "slide",
+                start: function(slider) {
+                    $('body').removeClass('loading');
+                }
+            });
+        });
+    </script>
+    <div class="scoll">
+        <section class="slider">
+            <div class="flexslider">
+                <ul class="slides">
+                 <foreach name="h_pictrue" item="val" > 
+                    <li class="tb-selected">
+                        <div class="tb-pic tb-s40">
+                            <a href="#"><img src="/Test/{$val['pic']}" mid="/Test/{$val['pic']}" big="/Test/{$val['pic']}"></a>
+                        </div>
+                    </li>
+                </foreach>
+                </ul>
+            </div>
+        </section>
+    </div>
+    <!--放大镜-->
+    <div class="item-inform">
+        <div class="clearfixLeft" id="clearcontent">
+
+            <div class="box">
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $(".jqzoom").imagezoom();
+                        $("#thumblist li a").click(function() {
+                            $(this).parents("li").addClass("tb-selected").siblings().removeClass("tb-selected");
+                            $(".jqzoom").attr('src', $(this).find("img").attr("mid"));
+                            $(".jqzoom").attr('rel', $(this).find("img").attr("big"));
+                        });
+                    });
+                </script>
+                <div class="tb-booth tb-pic tb-s310">
+                    <a href="/Test/{$h_pictrue[0]['pic']}"><img src="/Test/{$h_pictrue[0]['pic']}" alt="细节展示放大镜特效" rel="/Test/{$h_pictrue[0]['pic']}" class="jqzoom" /></a>
+                </div>
+                <ul class="tb-thumb" id="thumblist">
+                <foreach name="h_pictrue" item="val" > 
+                    <li class="tb-selected">
+                        <div class="tb-pic tb-s40">
+                            <a href="#"><img src="/Test/{$val['pic']}" mid="/Test/{$val['pic']}" big="/Test/{$val['pic']}"></a>
+                        </div>
+                    </li>
+                </foreach>
+                </ul>
+            </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clearfixRight">
+    <!--规格属性-->
+    <!--名称-->
+    <div class="tb-detail-hd">
+        <h1>{$h_detail['subtitle']}</h1>
+    </div>
+
+    <div class="tb-detail-list">
+        <!--价格-->
+        <div class="tb-detail-price">
+            <li class="price iteminfo_price">
+                <dt>促销价</dt>
+                <dd><em>¥</em><b class="sys_item_price">{$h_detail['promotion_price']}</b>  </dd>                                 
+            </li>
+            <li class="price iteminfo_mktprice">
+                <dt>原价</dt>
+                <dd><em>¥</em><b class="sys_item_mktprice">{$h_detail['price']}</b></dd>                                   
+            </li>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+
+        <!--销量-->
+        <ul class="tm-ind-panel">
+            <li class="tm-ind-item tm-ind-sumCount canClick">
+                <div class="tm-indcon"><span class="tm-label">累计销量</span><span class="tm-count">{$h_detail['sold']}</span></div>
+            </li>
+            <li class="tm-ind-item tm-ind-reviewCount canClick tm-line3">
+                <div class="tm-indcon"><span class="tm-label">累计评价</span><span class="tm-count">{$h_detail['comment']}</span></div>
+            </li>
+        </ul>
+        <div class="clear"></div>
+
+        <!--各种规格-->
+        <dl class="iteminfo_parameter sys_item_specpara">
+            <dt class="theme-login"><div class="cart-title">可选规格<span class="am-icon-angle-right"></span></div></dt>
+            <dd>
+                <!--操作页面-->
+
+                <div class="theme-popover-mask"></div>
+
+                <div class="theme-popover">
+                    <div class="theme-span"></div>
+                    <div class="" style="background:#fff;">
+                        <!-- <a href="javascript:;" id="close"  title="关闭" class="close">关闭</a> -->
+                    </div>
+                    <div class="theme-popbod dform">
+                      <form class="theme-signin" name="loginform" action="{:U('ShopCar/doAction')}" method="post" id="search_form">
+
+                            <div class="theme-signin-left">
+                                <div class="theme-options">
+                                    <div class="cart-title">口味</div>
+                                    <ul>
+                                    <foreach name="h_property" item="asd" key="k">
+                                        <li class="sku-line">{$asd['taste']}<i></i></li>
+                                        <input type="hidden" name="pid" value="{$asd['id']}"/>
+                                    </foreach>
+                                    </ul>
+                                    <!-- 隐藏域传属性id -->
+                                    <input type="hidden" name="pid" value=""/>
+                                </div>
+                            
+                                <div class="theme-options">
+                                    <div class="cart-title number">数量</div>
+                                    <dd>
+                                        <input id="min" class="am-btn am-btn-default" name="" type="button" value="-" />
+                                        <input id="text_box" name="buyNum" onkeyup="details(this)" type="number" value="1" style="width:50px;" />
+                                        <input id="add" class="am-btn am-btn-default" name="" type="button" value="+" />
+                                        <span id="Stock" class="tb-hidden">库存<span class="stock">{$h_property['0']['repertory']}</span>件</span>
+                                    </dd>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            
+                    </div>
+                </div>
+
+            </dd>
+        </dl>
+        <div class="clear"></div>
+        <!--活动  -->
+        <div class="shopPromotion gold">
+            <div class="hot">
+                <dt class="tb-metatit">店铺优惠</dt>
+                <div class="gold-list">
+                    <p>购物满2件打8折，满3件7折</p>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="coupon">
+                <dt class="tb-metatit">优惠券</dt>
+                <div class="gold-list">
+                    <ul>
+                        <li>125减5</li>
+                        <li>198减10</li>
+                        <li>298减20</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pay">
+        <div class="pay-opt">
+            <a href="home.html"><span class="am-icon-home am-icon-fw">首页</span></a>
+            <a><span class="am-icon-heart am-icon-fw">收藏</span></a> 
+        </div>
+        <!-- <li>
+            <div class="clearfix tb-btn tb-btn-buy theme-login">
+                <a id="LikBuy" title="点此按钮到下一步确认购买信息" href="#">立即购买</a>
+            </div>
+        </li> -->
+        <li>
+            <div class="clearfix tb-btn tb-btn-basket theme-login">
+                <button id="LikBasket" title="加入购物车"  href="javascript:void(0)"><i></i>加入购物车</button>
+            </div>
+</form> 
+             <div>
+                    <if condition="$_SESSION['homeInfo']"> 
+                        <span id="g_collect" name="collect" onclick="add(this,{$h_detail['id']},{$_SESSION['homeInfo']['id']})" style="width:100px;height:60px;margin-top:50px;">收藏商品
+                        </span>
+                    <else />
+                        <span onclick="log(this)" style="width:100px;height:60px;margin-top:50px;">收藏商品
+                        </span>
+                    </if>
+                </div>
+        </li>
+    </div>
+    </div>
+
+    <div class="clear"></div>
+    </div>              
+                            
+    <!-- introduce-->
+
+    <div class="introduce">
+        <div class="browse">
+            <div class="mc"> 
+                 <ul>                       
+                    <div class="mt">            
+                        <h2>看了又看</h2>        
+                    </div>
+                    
+                      <li class="first">
+                        <div class="p-img">                    
+                            <a  href="#"> <img class="" src="__PUBLIC__/images/browse1.jpg"> </a>               
+                        </div>
+                        <div class="p-name"><a href="#">
+                            【三只松鼠_开口松子】零食坚果特产炒货东北红松子原味
+                        </a>
+                        </div>
+                        <div class="p-price"><strong>￥35.90</strong></div>
+                      </li>
+                 </ul>                  
+            </div>
+        </div>
+        <div class="introduceMain">
+            <div class="am-tabs" data-am-tabs>
+                <ul class="am-avg-sm-3 am-tabs-nav am-nav am-nav-tabs">
+                    <li class="am-active">
+                        <a href="#" id="goodsDetail" ><span  class="index-needs-dt-txt">宝贝详情</span></a>
+                    </li>
+                    <li>
+                        <a href="#"  id="comment" gid="{$h_detail['id']}"><span class="index-needs-dt-txt">全部评价</span></a>
+                    </li>
+                </ul>
+
+                <div class="am-tabs-bd">
+                    <div class="am-tab-panel am-fade am-in am-active">
+                        <div class="J_Brand">
+                            <div class="attr-list-hd tm-clear">
+                                <h4>产品参数：</h4></div>
+                            <div class="clear"></div>
+                            <ul id="J_AttrUL">
+                            <foreach name="h_param" item="v" key="k">
+                                <li title="">{$k}:{$v}</li>
+                            </foreach>
+                            </ul>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="clear"></div>
+
+                    </div>
+                    <!-- 评论选项卡 -->
+                    <div class="am-tab-panel am-fade" id="goods_comment"></div>
+
+                </div>
+            </div>
+<!--选中不同口味有不同的库存 -->
+<script>
+    $('.sku-line').click(function() {
+        var val = $(this).text();
+        //ajax请求获取不同属性的库存和价格
+        $.ajax({
+            url:"{:U('Goods/g_Pro')}",
+            type:'post',
+            data:"name="+val,
+            success:function(res) {
+                //得到货存和价格，遍历到对象上
+                $('span[class=stock]').text(res.repertory);
+                $('b[class=sys_item_price]').text(res.now_price);
+            },
+            error:function(er) {
+                alert('出错');
+            }
+
+        });
+
+    });
+
+    //当模板缩小为640px时候，点击可选规格里的关闭，隐藏可选规格
+    $('#close').click(function() {
+        $('div[class=theme-popover-mask]').css('display','none');
+        $('div[class=theme-popover]').css('display','none');
+    });
+
+    //点击清空浏览历史时候清空浏览商品历史
+    $('#clear_id').click(function() {
+        $.ajax({
+            url:"{:U('Goods/clearId')}",
+            type: "post",
+            success:function(res) {
+                if(res == 1){
+                    $('#sc').parent().parent().parent().parent().remove();
+                }
+            },
+            error:function(dat){
+                alert('删除失败');
+            }
+
+        });
+    });
+
+    //点击口味时候用隐藏域存ID
+    //保存库存
+    var selectNum = 0;
+    var select = 0;
+    $('.sku-line').click(function() {
+        selectNum = $(this).next().val()
+        $('input[name="pid"]').val(selectNum);
+        select = $('input[name="gid"]').val(selectNum);
+    });
+
+
+    //点击添加商品数量。ajax查询库存
+    //保存库存数量
+    var stock = $('.stock').text(); 
+    //保存选择数量
+    var num = 1;
+   
+    $('#add').click(function(){
+        num = Number($('#text_box').val()) + 1;
+        $.ajax({
+            url:"{:U('Goods/stock')}",
+            data:'id='+selectNum,
+            type:'post',
+            success:function(res) {
+                stock = res;
+            },
+            error:function(er) {
+                alert('获取失败');
+            }
+       });
+    });
+    $('#min').click(function(){
+        num = Number($('#text_box').val()) - 1;
+        $.ajax({
+            url:"{:U('Goods/stock')}",
+            data:'id='+selectNum,
+            type:'post',
+            success:function(res) {
+                stock = res;
+            },
+            error:function(er) {
+                alert('获取失败');
+            }
+       });
+    });
+
+    //选择数量变成负数和0时候自动返回1
+    function details(obj) {
+        setTimeout(function(){
+            //获取当前商品数量
+            min=$(obj).val();
+            if (Number(min) < 1) {
+                $(obj).val(num);
+            }
+        },500);
+    }
+
+    //点击加入购物车判断
+
+    //判断选择数量是否为空
+    $('#text_box').change(function() {
+        num = $('#text_box').val();
+    });
+    $('#LikBasket').click(function() {
+        //判断是否选择口味
+        if(select) {
+            if(num == 1) {
+            } else if(num > 1){
+                if (Number(num) <= Number(stock)){
+                    //库存量满足。成功加入购物车
+                    console.log('加入成功');
+                } else{
+                    //库存不足
+                    alert('不好意思库存不足');
+                }
+            }
+        }else {
+
+            alert('请选择口味');return false;
+        }
+
+    });
+
+    //收藏开关
+    var shut = true;
+    //收藏功能
+    function add(obj,id,userid) {
+        if(shut) {
+            //ajax添加收藏
+            $.ajax({
+                url:"{:U('Goods/addCollect')}",
+                data:{"gid":id,"uid":userid},
+                type:'get',
+                success:function(res) {
+                    if (res == 1) {
+                       $(obj).text('商品已收藏');
+                       shut = false;
+                    }else if(res ==2) {
+                        alert('收藏失败');
+                    }
+                },
+                error:function(er) {
+                    alert('收藏失败');
+                }
+            });
+        } else {
+            //ajax取消收藏
+            $.ajax({
+                url:"{:U('Goods/reduceCollect')}",
+                data:{"gid":id,"uid":userid},
+                type:'get',
+                success:function(res) {
+                    if (res == 1) {
+                       $(obj).text('商品收藏');
+                        shut = true;
+                    }else if(res ==2) {
+                        alert('取消失败');
+                    }
+                },
+                error:function(er) {
+                    alert('取消失败');
+                }
+            });
+        }
+    }
+
+    /**
+     * 判断商品收藏没有登录就去登录页面
+     */
+    function log(obj) {
+        alert('请登录后收藏');
+        $(window).attr('location',"{:U('Login/index')}");
+    }
+
+    //选项卡
+    
+    //绑定事件
+    $('body').delegate('#comment','click',function() {
+        var num = $(this).attr('gid');
+        if ($('#goods_comment').text() == '') {
+            $.ajax({
+                url: "{:U('Goods/goodsComment')}",
+                data:'gid='+num,
+                type:'post',
+                success:function(res) {
+                    $('#goods_comment').html(res);
+                    $('#paging .pagination a,.pagination span').unwrap('<div></div>').wrap('<li></li>');
+                }
+            });
+        }
+    });
+
+    //为a标签绑定点击事件    
+    $('body').delegate('.pagination a', 'click', function() {
+        var ss = $('#comment').attr('gid');
+        var pageobj = this;
+        var url = pageobj.href;
+        $.ajax({
+                url: url,
+                data: 'gid='+ss,
+                type:'post',
+                success:function(res) { 
+                    $('#goods_comment').html(res);
+                    $('#paging .pagination a,.pagination span').unwrap('<div></div>').wrap('<li></li>');
+                }
+            });
+        return false;
+    });
+</script>
+</block>

@@ -1,0 +1,196 @@
+<extend name="Base/base" />
+	<block name="head">
+
+		<title>订单详情</title>
+
+		<link href="__PUBLIC__/css/admin.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/amazeui.css" rel="stylesheet" type="text/css">
+
+		<link href="__PUBLIC__/css/personal.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/orstyle.css" rel="stylesheet" type="text/css">
+
+		<script src="__PUBLIC__/js/jquery.min.js"></script>
+		<script src="__PUBLIC__/js/amazeui.js"></script>
+	</block>
+
+	<block name="main">
+	
+					<div class="user-orderinfo">
+
+						<!--标题 -->
+						<div class="am-cf am-padding">
+							<div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">订单详情</strong> / <small>Order&nbsp;details</small></div>
+						</div>
+						<hr/>
+						<!--进度条-->
+						<div class="m-progress">
+							<div class="m-progress-list">
+								<span class="step-1 step">
+                                   <em class="u-progress-stage-bg"></em>
+                                   <i class="u-stage-icon-inner">1<em class="bg"></em></i>
+                                   <p class="stage-name">拍下商品</p>
+                                </span>
+								
+								<if condition="$list2.statusNum gt 2">
+								<span class="step-2 step">
+								<else />
+								<span class="step-3 step">
+								</if>
+                                   <em class="u-progress-stage-bg"></em>
+                                   <i class="u-stage-icon-inner">2<em class="bg"></em></i>
+                                   <p class="stage-name">卖家发货</p>
+                                </span>
+
+
+                                <if condition="$list2.statusNum gt 3">
+								<span class="step-2 step">
+								<else />
+								<span class="step-3 step">
+								</if>
+                                   <em class="u-progress-stage-bg"></em>
+                                   <i class="u-stage-icon-inner">3<em class="bg"></em></i>
+                                   <p class="stage-name">确认收货</p>
+                                </span>
+
+
+
+								<if condition="$list2.statusNum eq 4">
+								<span class="step-2 step">
+								<else />
+								<span class="step-3 step">
+								</if>
+                                   <em class="u-progress-stage-bg"></em>
+                                   <i class="u-stage-icon-inner">4<em class="bg"></em></i>
+                                   <p class="stage-name">交易完成</p>
+                                </span>
+								<span class="u-progress-placeholder"></span>
+							</div>
+							<div class="u-progress-bar total-steps-2">
+								<div class="u-progress-bar-inner"></div>
+							</div>
+						</div>
+						
+						<div class="order-infomain">
+
+							<div class="order-top">
+								<div class="th th-item">
+									<td class="td-inner">商品</td>
+								</div>
+								<div class="th th-price">
+									<td class="td-inner">单价</td>
+								</div>
+								<div class="th th-number">
+									<td class="td-inner">数量</td>
+								</div>
+								<div class="th th-operation">
+									<td class="td-inner">商品操作</td>
+								</div>
+								<div class="th th-amount">
+									<td class="td-inner">合计</td>
+								</div>
+								<div class="th th-status">
+									<td class="td-inner">交易状态</td>
+								</div>
+								<div class="th th-change">
+									<td class="td-inner">交易操作</td>
+								</div>
+							</div>
+
+							<div class="order-main">
+
+								<div class="order-status3">
+									<div class="order-title">
+										<div class="dd-num">订单编号：<a href="javascript:;">{$list2.oid}</a></div>
+										<span>成交时间：{$list2.addtime}</span>
+										<!--    <em>店铺：小桔灯</em>-->
+									</div>
+									<div class="order-content">
+										<div class="order-left">
+
+										<foreach name="list" item="v">
+											<ul class="item-list">
+												<li class="td td-item">
+													<div class="item-pic">
+														<a href="#" class="J_MakePoint">
+															<img src="/Test/{$v.picname}" class="itempic J_ItemImg">
+														</a>
+													</div>
+													<div class="item-info">
+														<div class="item-basic-info">
+															<a href="#">
+																<p>{$v.name}</p>
+																<p class="info-little">
+																	类型:{$v.taste}
+																</p>
+															</a>
+														</div>
+													</div>
+												</li>
+												<li class="td td-price">
+													<div class="item-price">
+														{$v.price}
+													</div>
+												</li>
+												<li class="td td-number">
+													<div class="item-number">
+														<span>×</span>{$v.num}
+													</div>
+												</li>
+												<li class="td td-operation">
+													<div class="item-operation">
+														退款/退货
+													</div>
+												</li>
+											</ul>
+
+										</foreach>	
+
+										</div>
+										<div class="order-right">
+											<li class="td td-amount">
+												<div class="item-amount">
+													合计：{$list2.total}元
+													<p>(包邮)</p>
+												</div>
+											</li>
+											<div class="move-right">
+												<li class="td td-status">
+													<div class="item-status">
+														<p class="Mystatus">卖家已发货</p>
+														<p class="order-info"><a href="logistics.html">查看物流</a></p>
+														
+													</div>
+												</li>
+												<li class="td td-change">
+													<switch name="list2.status">
+
+																<case value="待付款">
+																<a href="{:U('Order/pay',['id'=>$list2['id']])}"><div class="am-btn am-btn-danger anniu">
+																	立即付款</div></a>
+																</case>
+
+																<case value="待发货">
+																<div class="am-btn am-btn-danger anniu">
+																	提醒发货</div>
+																</case>
+
+																<case value="待收货">
+																<a href="{:U('Order/doGet',['id'=>$list2['id']])}"><div class="am-btn am-btn-danger anniu">确认收货</div></a>
+																</case>
+
+																<case value="已完成">
+																<a href="{:U('Order/commentList',['id'=>$list2['id']])}"><div class="am-btn am-btn-danger anniu">立刻评价</div></a>
+																</case>
+
+															</switch>
+												</li>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+	</block>
+				

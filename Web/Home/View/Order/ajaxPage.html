@@ -1,0 +1,121 @@
+<div class="order-list">
+											
+		<!--交易成功-->
+		<!--不同状态订单-->
+		<foreach name="list" item="v">
+		<div class="order-status3">
+			<div class="order-title">
+				<div class="dd-num">订单编号：<a href="javascript:;">{$v.oid}</a></div>
+				<span>成交时间：{$v.addtime}</span>
+				<!--    <em>店铺：小桔灯</em>-->
+			</div>
+			<div class="order-content">
+				<div class="order-left">
+
+
+			<foreach name="list2" item="v2">		
+				<if condition="$v2['orderid'] eq $v['id']">
+					<ul class="item-list">
+						<li class="td td-item">
+							<div class="item-pic">
+								<a href="{:U('Goods/detail',['id'=>$v2['goodsid']])}" class="J_MakePoint">
+									<img src="/Test/{$v2.picname}" class="itempic J_ItemImg">
+								</a>
+							</div>
+							<div class="item-info">
+								<div class="item-basic-info">
+									<a href="{:U('Goods/detail',['id'=>$v2['goodsid']])}">
+										<p>{$v2.name}</p>
+										<p class="info-little">分类：{$v2.taste}
+											
+									</a>
+								</div>
+							</div>
+						</li>
+						<li class="td td-price">
+							<div class="item-price">
+								{$v2.price}
+							</div>
+						</li>
+						<li class="td td-number">
+							<div class="item-number">
+								<span>×</span>{$v2.num}
+							</div>
+						</li>
+						<li class="td td-operation">
+							<div class="item-operation">
+								<a href="{:U('Goods/detail',['id'=>$v2['goodsid']])}">查看</a>
+							</div>
+						</li>
+					</ul>
+				</if>
+			</foreach>
+
+
+
+				</div>
+				<div class="order-right">
+					<li class="td td-amount">
+						<div class="item-amount">
+							合计：{$v.total}元
+							<p>(包邮)</p>
+						</div>
+					</li>
+					<div class="move-right">
+						<li class="td td-status">
+							<div class="item-status">
+								<p class="Mystatus">{$v.status}</p>
+								<p class="order-info"><a href="{:U('Order/orderInfo',['id'=> $v['id'] ])}">订单详情</a></p>
+								<if condition="$v.status eq '待收货'">
+									<p class="order-info"><a href="">查看物流</a></p>
+								
+									<p class="order-info"><a href="#">延长收货</a></p>
+								</if>
+							</div>
+						</li>
+						<li class="td td-change">
+						<switch name="v.status">
+
+							<case value="待付款">
+							<a href="{:U('Order/pay',['id'=>$v['id']])}"><div class="am-btn am-btn-danger anniu">
+								立即付款</div></a>
+							</case>
+
+							<case value="待发货">
+							<div class="am-btn am-btn-danger anniu">
+								提醒发货</div>
+							</case>
+
+							<case value="待收货">
+							<a href="{:U('Order/doGet',['id'=>$v['id']])}"><div class="am-btn am-btn-danger anniu">确认收货</div></a>
+							</case>
+
+							<case value="已完成">
+							<a href="{:U('Order/commentList',['id'=>$v['id']])}"><div class="am-btn am-btn-danger anniu">立刻评价</div></a>
+							</case>
+
+						</switch>
+						</li>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		</foreach>
+
+
+		<div class="order-status1">
+		<div class="order-title">
+			<div class="pagination" style="position:absolute;left:500px;z-line:10">
+	        	<ul>
+	          		{$btn}
+	       		</ul>
+			</div>
+		</div>
+		</div>
+
+
+
+
+
+</div>

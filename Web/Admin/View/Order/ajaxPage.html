@@ -1,0 +1,28 @@
+<foreach name="list" item="v">
+     <tr tid="{$v.id}">
+     
+     <td>{$v.oid}</td>
+     <td class="order_product_name">
+  <foreach name = "list2" item="v2">
+  <if condition="$v2[orderid] eq $v['id']">
+    <i>·</i>
+        <img src="/Test/{$v2['picname']}"  title="产品名称" style="width:50px;height:50px"/>
+        <i>·</i>
+    </if>
+    </foreach>   
+     </td>
+     <td>{$v.total}</td>
+     <td>{$v.addtime}</td>
+     <td>{$v.receiver}</td>
+      <td class="td-status"><span class="label label-success radius">{$v.status}</span></td>
+     <td>
+     <if condition="$v.status eq '待发货'">
+      <a  href="javascript:void(0);" title="发货"  id="flow" class="btn btn-xs btn-success"><i class="fa fa-cubes bigger-120"></i></a> 
+     </if>
+     <a title="订单详细"  href="{:U('Order/detail',['id'=>$v['id']])}"  class="btn btn-xs btn-info order_detailed" ><i class="fa fa-list bigger-120"></i></a> 
+        
+     </td>
+     </tr>
+    
+
+  </foreach> 

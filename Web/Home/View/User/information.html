@@ -1,0 +1,181 @@
+<extend name="Base/base" />
+	<block name="head">
+		<title>个人资料</title>
+
+		<link href="__PUBLIC__/css/admin.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/amazeui.css" rel="stylesheet" type="text/css">
+
+		<link href="__PUBLIC__/css/personal.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/infstyle.css" rel="stylesheet" type="text/css">
+		<script src="__PUBLIC__/js/jquery.min.js" type="text/javascript"></script>
+		<script src="__PUBLIC__/js/amazeui.js" type="text/javascript"></script>
+	</block>		
+	<block name="main">
+
+					<div class="user-info">
+						<!--标题 -->
+						<div class="am-cf am-padding">
+							<div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">个人资料</strong> / <small>Personal&nbsp;information</small></div>
+						</div>
+						<hr/>
+
+						<!--头像 -->
+						<div class="user-infoPic">
+						<form class="am-form am-form-horizontal" action="{:U('User/doPerson')}" method="post" id="change" enctype="multipart/form-data">
+							<div class="filePic">
+								<input type="file" class="inputPic" allowexts="gif,jpeg,jpg,png,bmp"  name="pic" />
+								<img class="am-circle am-img-thumbnail" src="{$info.head}" alt="" style="width:100px;height:100px"/>
+							</div>
+
+							<p class="am-form-help">头像</p>
+
+							<div class="info-m">
+								<div><b>用户名：<i>{$info.username}</i></b></div>
+								<div class="u-level">
+									<span class="rank r2">
+							             <s class="vip1"></s>签到次数:{$info.signnum}次
+						            </span>
+								</div>
+								<div class="u-safety">
+									
+									 用户积分
+									<span class="u-profile"><i class="bc_ee0000" style="width: 60px;" width="0">{$info.sign}</i></span>
+									
+								</div>
+								<div class="u-safety">
+
+									
+									 用户等级:
+									<if condition="$info.sign gt 100">
+									<span class="u-profile"><i class="bc_ee0000" style="width: 60px;" width="0">VIP</i></span>
+									<else / >
+									<span class="u-profile"><i class="bc_ee0000" style="width: 60px;" width="0">普通用户</i></span>
+									</if>
+									
+								</div>
+							</div>
+						</div>
+
+						<!--个人信息 -->
+						<div class="info-main">
+							
+
+								<div class="am-form-group">
+									<label for="user-name2" class="am-form-label">账号</label>
+									<div class="am-form-content">
+										{$info.username}
+
+									</div>
+								</div>
+
+								<div class="am-form-group">
+									<label for="user-name" class="am-form-label">姓名</label>
+									<div class="am-form-content">
+										<input type="text" id="user-name2" value="{$info.name}" name="name">
+
+									</div>
+								</div>
+
+								<div class="am-form-group">
+									<label class="am-form-label">性别</label>
+									<div class="am-form-content sex">
+										<label class="am-radio-inline">
+										<if condition="$info.sex eq '男'">
+											<input type="radio" checked name="sex" value="1" > 男
+										<else />
+											<input type="radio"  name="sex" value="1"> 男
+										</if>
+										</label>
+										<label class="am-radio-inline">
+										<if condition="$info.sex eq '女'">
+											<input type="radio" checked name="sex" value="2" > 女
+										<else />
+											<input type="radio" name="sex" value="2" > 女
+										</if>
+										</label>
+										<label class="am-radio-inline">
+										<if condition="$info.sex eq '保密'">
+											<input type="radio"  checked name="sex" value="3" > 保密
+										<else / >
+											<input type="radio" name="sex" value="3" > 保密
+										</if>
+										</label>
+									</div>
+								</div>
+
+								
+								<div class="am-form-group">
+									<label for="user-phone" class="am-form-label">电话</label>
+									<div class="am-form-content">
+										<input id="user-phone" value="{$info.phone}" type="tel" name="phone">
+										
+									</div>
+								</div>
+								<div class="am-form-group">
+									<label for="user-email" class="am-form-label">电子邮件</label>
+									<div class="am-form-content">
+										<input id="user-email" value="{$info.email}" type="email" name="email">
+
+									</div>
+								</div>
+								
+								
+								<div class="info-btn">
+									<a href="javascript:document.getElementById('change').submit();"><div class="am-btn am-btn-danger">保存修改</div></a>
+								</div>
+
+							</form>
+						</div>
+					<script type="text/javascript">
+					$('#user-phone').change(function(){
+						console.log(1);
+						var phone = $(this).val();
+						$.ajax({
+							url:"{:U('User/personage')}",
+							data:"phone="+phone,
+							type:"post",
+							success:function(res){
+								if(res.status == 1){
+									var span = $('<span  style="color:green;">'+ res.msg +'</span>');
+								}else{
+									var span = $('<span  style="color:red;">'+ res.msg +'</span>');
+								}
+								$('#user-phone + span').remove();
+								$('#user-phone').after(span);
+							},
+							error:function(){
+								console.log('miss');
+							}
+
+						});
+
+					});
+
+
+					$('#user-email').change(function(){
+						console.log(1);
+						var email = $(this).val();
+						$.ajax({
+							url:"{:U('User/personage')}",
+							data:"email="+email,
+							type:"post",
+							success:function(res){
+								if(res.status == 1){
+									var span = $('<span  style="color:green;">'+ res.msg +'</span>');
+								}else{
+									var span = $('<span  style="color:red;">'+ res.msg +'</span>');
+								}
+								$('#user-email + span').remove();
+								$('#user-email').after(span);
+							},
+							error:function(){
+								console.log('miss');
+							}
+
+						});
+
+					});
+					</script>
+					</div>
+	</block>
+				
